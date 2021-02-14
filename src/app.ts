@@ -1,4 +1,4 @@
-
+// Project Type
 enum ProjectStatus {
   Active,
   Finished
@@ -14,7 +14,7 @@ class Project {
   ) {}
 }
 
-
+// Project State Management
 type Listener<T> = (items: T[]) => void;
 
 class State<T> {
@@ -58,7 +58,7 @@ class ProjectState extends State<Project> {
 
 const projectState = ProjectState.getInstance();
 
-
+// Validation
 interface Validatable {
   value: string | number;
   required?: boolean;
@@ -102,7 +102,7 @@ function validate(validatableInput: Validatable) {
   return isValid;
 }
 
-
+// autobind decorator
 function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
   const adjDescriptor: PropertyDescriptor = {
@@ -115,7 +115,7 @@ function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
   return adjDescriptor;
 }
 
-
+// Component Base Class
 abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   templateElement: HTMLTemplateElement;
   hostElement: T;
@@ -155,9 +155,17 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   abstract renderContent(): void;
 }
 
-
+// ProjectItem Class
 class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
   private project: Project;
+
+  get persons() {
+    if (this.project.people === 1) {
+      return '1 person';
+    } else {
+      return `${this.project.people} persons`;
+    }
+  }
 
   constructor(hostId: string, project: Project) {
     super('single-project', hostId, false, project.id);
@@ -171,14 +179,12 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
 
   renderContent() {
     this.element.querySelector('h2')!.textContent = this.project.title;
-    this.element.querySelector(
-      'h3'
-    )!.textContent = this.project.people.toString();
+    this.element.querySelector('h3')!.textContent = this.persons + ' assigned';
     this.element.querySelector('p')!.textContent = this.project.description;
   }
 }
 
-
+// ProjectList Class
 class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   assignedProjects: Project[];
 
@@ -221,7 +227,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   }
 }
 
-
+// ProjectInput Class
 class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   titleInputElement: HTMLInputElement;
   descriptionInputElement: HTMLInputElement;
